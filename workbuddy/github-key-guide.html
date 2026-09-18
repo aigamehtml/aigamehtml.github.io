@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>获取 GitHub 访问秘钥 · 图文教程</title>
+<meta name="description" content="手把手图文教程：生成 Fine-grained Personal Access Token，只授权一个仓库，让 AI 能安全地帮你部署网页。">
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-soft:#f6f7f9;
+    --line:#e6e8ec;
+    --line-strong:#d3d7de;
+    --text:#1c1e21;
+    --text-2:#5a6169;
+    --text-3:#8b929b;
+    --accent:#1f6feb;
+    --accent-soft:#eaf2ff;
+    --warn:#b54708;
+    --warn-bg:#fff8ec;
+    --warn-line:#f5d9a8;
+    --danger:#b42318;
+    --danger-bg:#fef3f2;
+    --danger-line:#f5c6c2;
+    --ok:#1a7f4b;
+    --ok-bg:#e8f6ee;
+    --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans);
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:800px;margin:0 auto;padding:0 22px}
+
+  /* ---------- 头部 ---------- */
+  header{
+    padding:64px 0 44px;
+    border-bottom:1px solid var(--line);
+    background:
+      radial-gradient(700px 250px at 10% -10%, var(--accent-soft), transparent 70%),
+      radial-gradient(560px 220px at 95% 5%, #eef7f1, transparent 70%);
+  }
+  .kicker{
+    display:inline-block;
+    font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--accent);
+    background:rgba(255,255,255,.8);
+    border:1px solid var(--line);
+    border-radius:999px;padding:4px 12px;margin-bottom:18px;
+  }
+  h1{font-size:clamp(27px,4.8vw,40px);line-height:1.25;letter-spacing:-.02em;font-weight:800}
+  h1 .hl{background:linear-gradient(90deg,#1f6feb,#1a7f4b);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{margin-top:16px;font-size:16.5px;color:var(--text-2);max-width:620px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .chip{
+    font-size:13px;color:var(--text-2);
+    background:#fff;border:1px solid var(--line);
+    border-radius:999px;padding:5px 13px;
+  }
+  .chip b{color:var(--text)}
+
+  /* ---------- 目录 ---------- */
+  nav.toc{
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px 22px;
+    margin:32px 0 0;
+  }
+  nav.toc .t{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-bottom:10px}
+  nav.toc ol{list-style:none;counter-reset:t}
+  nav.toc li{counter-increment:t;font-size:14.5px;padding:3px 0}
+  nav.toc li::before{content:counter(t) ". ";color:var(--text-3);font-variant-numeric:tabular-nums}
+  nav.toc a{color:var(--text);text-decoration:none;border-bottom:1px solid transparent}
+  nav.toc a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+
+  /* ---------- 章节 ---------- */
+  section{padding:48px 0;border-bottom:1px solid var(--line)}
+  section:last-of-type{border-bottom:0}
+  .stage{
+    display:flex;align-items:center;gap:13px;margin-bottom:10px;
+  }
+  .num{
+    flex:0 0 auto;
+    width:34px;height:34px;border-radius:10px;
+    background:var(--accent);color:#fff;
+    font-size:15px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .num.gray{background:#4b5563}
+  h2{font-size:clamp(20px,3vw,25px);font-weight:750;letter-spacing:-.015em;line-height:1.35}
+  .sub{color:var(--text-2);font-size:15px;margin-bottom:8px}
+  h3{font-size:16px;font-weight:700;margin:26px 0 8px;color:var(--text)}
+  p{color:var(--text-2);font-size:15.5px}
+  p + p{margin-top:11px}
+  strong{color:var(--text)}
+  ol.plain,ul.plain{margin:12px 0 0;padding-left:0;list-style:none;counter-reset:s}
+  ul.plain li{
+    position:relative;padding-left:20px;
+    font-size:15px;color:var(--text-2);margin-bottom:8px;
+  }
+  ul.plain li::before{
+    content:"";position:absolute;left:3px;top:.65em;
+    width:5px;height:5px;border-radius:50%;background:var(--accent);
+  }
+  ol.plain{counter-reset:s}
+  ol.plain li{
+    counter-increment:s;position:relative;padding-left:30px;
+    font-size:15px;color:var(--text-2);margin-bottom:9px;
+  }
+  ol.plain li::before{
+    content:counter(s);
+    position:absolute;left:0;top:.28em;
+    width:19px;height:19px;border-radius:50%;
+    background:var(--accent-soft);color:var(--accent);
+    font-size:11.5px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  ol.plain li b, ul.plain li b{color:var(--text)}
+  .tag{
+    display:inline-block;font-family:var(--mono);font-size:12.5px;
+    background:#f0f2f5;border:1px solid var(--line);
+    border-radius:6px;padding:1px 7px;color:#324;
+  }
+  .tag.must{background:var(--danger-bg);border-color:var(--danger-line);color:var(--danger);font-weight:600}
+
+  /* ---------- 图片 ---------- */
+  figure{
+    margin:20px 0 6px;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    background:#fbfbfc;
+  }
+  figure img{
+    display:block;width:100%;height:auto;
+    cursor:zoom-in;
+    background:#fff;
+  }
+  figcaption{
+    font-size:13.5px;color:var(--text-3);
+    padding:11px 16px;
+    border-top:1px solid var(--line);
+    background:#fff;
+  }
+  .figs{display:grid;gap:14px;grid-template-columns:1fr 1fr;margin-top:18px}
+  .figs figure{margin:0}
+  @media (max-width:640px){.figs{grid-template-columns:1fr}}
+
+  /* ---------- 提示框 ---------- */
+  .box{
+    border-radius:var(--radius);
+    padding:18px 20px;
+    margin:22px 0;
+    font-size:15px;
+  }
+  .box .bt{font-weight:700;margin-bottom:6px;display:flex;gap:8px;align-items:center}
+  .box p{font-size:14.5px}
+  .box.warn{background:var(--warn-bg);border:1px solid var(--warn-line);color:#7a3d05}
+  .box.warn .bt{color:var(--warn)}
+  .box.warn p{color:#7a3d05}
+  .box.danger{background:var(--danger-bg);border:1px solid var(--danger-line);color:#7a2018}
+  .box.danger .bt{color:var(--danger)}
+  .box.danger p{color:#7a2018}
+  .box.ok{background:var(--ok-bg);border:1px solid #c6e6d4;color:#14532d}
+  .box.ok .bt{color:var(--ok)}
+  .box.ok p{color:#14532d}
+  .box ul.plain li, .box ol.plain li{color:inherit;font-size:14.5px}
+
+  /* ---------- 代码 ---------- */
+  pre{
+    background:#1c1e21;color:#e8eaed;
+    font-family:var(--mono);font-size:13px;line-height:1.7;
+    border-radius:10px;padding:14px 16px;overflow-x:auto;margin-top:12px;
+  }
+  pre .c{color:#8b929b}
+
+  /* ---------- 灯箱 ---------- */
+  #lightbox{
+    position:fixed;inset:0;z-index:99;
+    background:rgba(16,18,20,.92);
+    display:none;align-items:center;justify-content:center;
+    padding:24px;cursor:zoom-out;
+  }
+  #lightbox.on{display:flex}
+  #lightbox img{
+    max-width:100%;max-height:100%;
+    border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.5);
+    background:#fff;
+  }
+  #lightbox .close{
+    position:absolute;top:16px;right:20px;
+    color:#fff;font-size:30px;line-height:1;
+    background:none;border:0;cursor:pointer;opacity:.75;
+    font-family:var(--sans);
+  }
+  #lightbox .close:hover{opacity:1}
+
+  /* ---------- 页脚 ---------- */
+  footer{padding:34px 0 60px;font-size:13.5px;color:var(--text-3);border-top:1px solid var(--line)}
+  footer .fgrid{display:flex;flex-wrap:wrap;gap:10px 20px;justify-content:space-between}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="kicker">图文教程</span>
+    <h1>获取 GitHub <span class="hl">访问秘钥</span></h1>
+    <p class="lede">
+      想让 AI 帮你把网页推到 GitHub 上，得先给它一把钥匙。
+      这篇教你生成一把<b>只开一扇门</b>的钥匙 —— 只授权那一个仓库，别的碰不到。
+    </p>
+    <div class="meta">
+      <span class="chip">预计耗时 <b>约 3 分钟</b></span>
+      <span class="chip">类型 <b>Fine-grained Token</b></span>
+      <span class="chip">权限 <b>Contents 读写</b></span>
+    </div>
+
+    <nav class="toc">
+      <div class="t">目录</div>
+      <ol>
+        <li><a href="#net">网络打不开 GitHub 怎么办</a></li>
+        <li><a href="#s1">进入开发者设置</a></li>
+        <li><a href="#s2">创建 Fine-grained Token</a></li>
+        <li><a href="#s3">配置 Token 信息</a></li>
+        <li><a href="#s4">授权范围配置（关键）</a></li>
+        <li><a href="#s5">确认并生成</a></li>
+        <li><a href="#care">拿到之后怎么保管</a></li>
+      </ol>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- 网络 -->
+  <section id="net">
+    <div class="wrap">
+      <div class="stage">
+        <div class="num gray">0</div>
+        <h2>网络打不开 GitHub 怎么办</h2>
+      </div>
+      <p>如果你的网络无法直接访问 GitHub，可以用 Watt Tools 加速工具。</p>
+      <p><strong>下载地址：</strong> <a href="https://steampp.net/" target="_blank" rel="noopener">https://steampp.net/</a></p>
+
+      <div class="figs">
+        <figure>
+          <img src="images/image-114.png" alt="Watt Tools 界面" loading="lazy">
+          <figcaption>Watt Tools 界面</figcaption>
+        </figure>
+        <figure>
+          <img src="images/image-115.png" alt="Watt Tools 设置" loading="lazy">
+          <figcaption>Watt Tools 设置</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 第一步 -->
+  <section id="s1">
+    <div class="wrap">
+      <div class="stage">
+        <div class="num">1</div>
+        <h2>进入开发者设置</h2>
+      </div>
+      <p class="sub">秘钥的入口藏得比较深，在设置页的最底下。</p>
+
+      <ol class="plain">
+        <li>登录 GitHub 后，点击右上角<b>头像</b></li>
+        <li>选择 <span class="tag">Settings</span>（账户设置）</li>
+      </ol>
+      <figure>
+        <img src="images/image-150.png" alt="账户设置入口" loading="lazy">
+        <figcaption>账户设置入口 —— 点右上角头像</figcaption>
+      </figure>
+
+      <ol class="plain" start="3" style="counter-reset:s 2">
+        <li>在左侧菜单栏<b>最底部</b>，点击 <span class="tag">Developer settings</span></li>
+      </ol>
+      <figure>
+        <img src="images/image-151.png" alt="开发者设置位置" loading="lazy">
+        <figcaption>开发者设置位置 —— 左侧菜单最底部</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 第二步 -->
+  <section id="s2">
+    <div class="wrap">
+      <div class="stage">
+        <div class="num">2</div>
+        <h2>创建 Fine-grained Token</h2>
+      </div>
+      <p class="sub">GitHub 有两种令牌，我们要的是权限更细的那种。</p>
+
+      <ol class="plain">
+        <li>在左侧菜单选择 <span class="tag">Personal access tokens</span></li>
+        <li>点击 <span class="tag">Fine-grained tokens</span></li>
+        <li>点击 <span class="tag">Generate new token</span></li>
+      </ol>
+      <figure>
+        <img src="images/image-152.png" alt="选择 Fine-grained tokens" loading="lazy">
+        <figcaption>选择 Fine-grained tokens</figcaption>
+      </figure>
+
+      <div class="box warn">
+        <div class="bt">⚠️ 别选错</div>
+        <p>不要选成 <span class="tag">Tokens (classic)</span>。老式令牌权限太粗（一刀切给整个账号的读写），
+           万一泄漏损失大。Fine-grained 能精确到「只读某个仓库的某类内容」。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 第三步 -->
+  <section id="s3">
+    <div class="wrap">
+      <div class="stage">
+        <div class="num">3</div>
+        <h2>配置 Token 信息</h2>
+      </div>
+
+      <h3>基本信息</h3>
+      <ul class="plain">
+        <li><b>Token name</b>：起个能认出来的名字，建议简洁明了，例如 <span class="tag">ai-deploy-blog</span></li>
+        <li><b>Description</b>：用途说明，可选。写「用于 AI 部署网页」之类，日后好认</li>
+      </ul>
+      <figure>
+        <img src="images/image-153.png" alt="设置 Token 名称和描述" loading="lazy">
+        <figcaption>设置 Token 名称和描述</figcaption>
+      </figure>
+
+      <h3>有效期</h3>
+      <ul class="plain">
+        <li>按需求选择：<b>30 天 / 60 天 / 90 天</b>或自定义</li>
+        <li><b>建议 90 天</b> —— 到期后重新生成一个即可。记得在日历上记一下，否则某天推送会突然被拒</li>
+      </ul>
+      <figure>
+        <img src="images/image-154.png" alt="设置有效期" loading="lazy">
+        <figcaption>设置有效期</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 第四步 -->
+  <section id="s4">
+    <div class="wrap">
+      <div class="stage">
+        <div class="num">4</div>
+        <h2>授权范围配置</h2>
+      </div>
+      <p class="sub">这是整篇教程最关键的一步，决定这把钥匙能开哪扇门。</p>
+
+      <h3>选择仓库访问范围</h3>
+      <ul class="plain">
+        <li>选 <span class="tag">Only select repositories</span>（仅授权特定仓库）</li>
+        <li>在下拉列表里勾选<b>你需要访问的那个仓库</b></li>
+      </ul>
+      <figure>
+        <img src="images/image-155.png" alt="选择单仓库授权" loading="lazy">
+        <figcaption>选择 Only select repositories —— 只授权特定仓库</figcaption>
+      </figure>
+      <figure>
+        <img src="images/image-156.png" alt="选择目标仓库" loading="lazy">
+        <figcaption>在下拉列表中选择你的目标仓库</figcaption>
+      </figure>
+      <figure>
+        <img src="images/image-157.png" alt="确认仓库选择" loading="lazy">
+        <figcaption>确认仓库已选中</figcaption>
+      </figure>
+
+      <h3>配置权限</h3>
+      <ol class="plain">
+        <li>展开 <span class="tag">Repository permissions</span></li>
+        <li>找到 <span class="tag must">Contents</span> 这一项</li>
+        <li>把权限设为 <b>Read and write</b>（读写）</li>
+      </ol>
+      <div class="figs">
+        <figure>
+          <img src="images/image-158.png" alt="设置开放权限" loading="lazy">
+          <figcaption>展开 Repository permissions</figcaption>
+        </figure>
+        <figure>
+          <img src="images/image-159.png" alt="找到 Contents 选项" loading="lazy">
+          <figcaption>找到 Contents 选项</figcaption>
+        </figure>
+      </div>
+      <figure>
+        <img src="images/image-160.png" alt="选择读写权限" loading="lazy">
+        <figcaption>Contents 权限选 Read and write</figcaption>
+      </figure>
+
+      <div class="box danger">
+        <div class="bt">🔒 其他权限一律不动</div>
+        <p>除了 <span class="tag">Contents</span>，其余权限保持默认的 <b>No access</b>。
+           给得越少越安全 —— 这把钥匙只需要能往仓库里写文件，别的什么都不需要。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 第五步 -->
+  <section id="s5">
+    <div class="wrap">
+      <div class="stage">
+        <div class="num">5</div>
+        <h2>确认并生成</h2>
+      </div>
+
+      <ol class="plain">
+        <li>检查所有配置信息无误</li>
+        <li>点击 <span class="tag">Generate token</span> 确认</li>
+        <li>在弹窗中<b>再次确认</b></li>
+        <li>系统会生成并显示 Token</li>
+      </ol>
+      <figure>
+        <img src="images/image-161.png" alt="确认配置" loading="lazy">
+        <figcaption>确认配置信息</figcaption>
+      </figure>
+      <div class="figs">
+        <figure>
+          <img src="images/image-162.png" alt="弹窗确认" loading="lazy">
+          <figcaption>弹窗再次确认</figcaption>
+        </figure>
+        <figure>
+          <img src="images/image-163.png" alt="生成成功" loading="lazy">
+          <figcaption>生成成功，立刻复制</figcaption>
+        </figure>
+      </div>
+
+      <div class="box danger">
+        <div class="bt">⚠️ 立即复制保存你的 Token！</div>
+        <ul class="plain">
+          <li>Token <b>只在生成时显示一次</b>，刷新页面后就再也看不到</li>
+          <li>如果不慎丢失，只能删除旧 Token，重新生成一个新的</li>
+          <li>建议保存在安全的密码管理器里</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 保管 -->
+  <section id="care">
+    <div class="wrap">
+      <div class="stage">
+        <div class="num gray">✓</div>
+        <h2>拿到之后怎么保管</h2>
+      </div>
+
+      <p>复制到的这串字符（形如 <span class="tag">github_pat_11ABC...</span>）就是你的访问秘钥。
+         建议存成<b>环境变量</b>，而不是写在文件里 —— 文件容易被误传到网上。</p>
+
+      <h3>Windows（PowerShell）</h3>
+<pre><span class="c"># 用户级环境变量，永久生效，无需管理员权限</span>
+[Environment]::SetEnvironmentVariable("GITHUB_PAGES_TOKEN","你的TOKEN","User")</pre>
+
+      <h3>macOS / Linux</h3>
+<pre>echo 'export GITHUB_PAGES_TOKEN="你的TOKEN"' &gt;&gt; ~/.bashrc   <span class="c"># zsh 改成 ~/.zshrc</span>
+chmod 600 ~/.bashrc</pre>
+
+      <div class="box ok">
+        <div class="bt">✓ 存好之后</div>
+        <p>把这个环境变量的名字（<span class="tag">GITHUB_PAGES_TOKEN</span>）告诉 AI，它就能读着这把钥匙帮你部署网页了。
+           你不需要把秘钥粘贴到聊天里。</p>
+      </div>
+
+      <h3>安全提醒</h3>
+      <ul class="plain">
+        <li>不要把 Token 分享给他人</li>
+        <li>不要把它提交到代码仓库里</li>
+        <li>定期检查权限与有效期，到期前换新</li>
+        <li>想立即作废：去 GitHub → Developer settings 删掉那个 Token，马上失效</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap fgrid">
+    <span>图文教程 · 点任意图片可放大查看</span>
+    <span><a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">打开 GitHub 令牌页面 ↗</a></span>
+  </div>
+</footer>
+
+<div id="lightbox" role="dialog" aria-label="图片预览">
+  <button class="close" aria-label="关闭">×</button>
+  <img src="" alt="">
+</div>
+
+<script>
+(function(){
+  var lb = document.getElementById('lightbox');
+  var lbImg = lb.querySelector('img');
+  var closeBtn = lb.querySelector('.close');
+
+  function open(src, alt){
+    lbImg.src = src;
+    lbImg.alt = alt || '';
+    lb.classList.add('on');
+    document.body.style.overflow = 'hidden';
+  }
+  function close(){
+    lb.classList.remove('on');
+    lbImg.src = '';
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('figure img').forEach(function(img){
+    img.addEventListener('click', function(){ open(img.src, img.alt); });
+  });
+  lb.addEventListener('click', close);
+  closeBtn.addEventListener('click', function(e){ e.stopPropagation(); close(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && lb.classList.contains('on')) close(); });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub Pages 是什么 · 一页看懂</title>
+<meta name="description" content="一页看懂 GitHub Pages：它是什么、能做什么、三分钟上手、怎么绑自己的域名。">
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-soft:#f6f7f9;
+    --panel:#ffffff;
+    --line:#e6e8ec;
+    --text:#1c1e21;
+    --text-2:#5a6169;
+    --text-3:#8b929b;
+    --accent:#1f6feb;
+    --accent-soft:#eaf2ff;
+    --green:#1a7f4b;
+    --green-soft:#e8f6ee;
+    --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans);
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px}
+
+  /* ---------- HERO ---------- */
+  header{
+    padding:72px 0 56px;
+    border-bottom:1px solid var(--line);
+    background:
+      radial-gradient(720px 260px at 12% -10%, var(--accent-soft), transparent 70%),
+      radial-gradient(600px 240px at 92% 0%, var(--green-soft), transparent 70%);
+  }
+  .kicker{
+    display:inline-block;
+    font-size:12px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--accent);
+    background:rgba(255,255,255,.75);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:4px 12px;
+    margin-bottom:20px;
+  }
+  h1{
+    font-size:clamp(30px,5.2vw,46px);
+    line-height:1.22;
+    letter-spacing:-.02em;
+    font-weight:800;
+  }
+  h1 .hl{
+    background:linear-gradient(90deg,#1f6feb,#1a7f4b);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .lede{
+    margin-top:18px;
+    font-size:17px;
+    color:var(--text-2);
+    max-width:640px;
+  }
+  .btn-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+  .btn{
+    display:inline-flex;align-items:center;gap:7px;
+    font-size:14px;font-weight:600;
+    padding:9px 16px;border-radius:10px;
+    text-decoration:none;
+    border:1px solid var(--line);
+    color:var(--text);
+    background:#fff;
+    transition:.16s ease;
+  }
+  .btn:hover{border-color:#c9ced6;transform:translateY(-1px)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{background:#1a5fd0}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:56px 0;border-bottom:1px solid var(--line)}
+  section:last-of-type{border-bottom:0}
+  h2{
+    font-size:13px;font-weight:700;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--text-3);
+    margin-bottom:22px;
+  }
+  h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px}
+  p{color:var(--text-2)}
+  p + p{margin-top:12px}
+  strong{color:var(--text)}
+
+  /* 一句话定义 */
+  .define{
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    border-left:3px solid var(--accent);
+    border-radius:var(--radius);
+    padding:22px 24px;
+    font-size:17px;
+    color:var(--text);
+  }
+  .define b{color:var(--accent)}
+
+  /* 卡片网格 */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px;
+    transition:.18s ease;
+  }
+  .card:hover{border-color:#cbd2dc;box-shadow:0 6px 20px rgba(28,30,33,.06)}
+  .card .ico{
+    width:34px;height:34px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--accent-soft);color:var(--accent);
+    font-size:17px;margin-bottom:12px;
+  }
+  .card h3{font-size:16px}
+  .card p{font-size:14.5px}
+  .card.c3 .ico{background:var(--green-soft);color:var(--green)}
+
+  /* 步骤 */
+  ol.steps{list-style:none;counter-reset:s}
+  ol.steps > li{
+    counter-increment:s;
+    position:relative;
+    padding:0 0 26px 46px;
+    border-left:1px solid var(--line);
+    margin-left:13px;
+  }
+  ol.steps > li:last-child{border-left-color:transparent;padding-bottom:0}
+  ol.steps > li::before{
+    content:counter(s);
+    position:absolute;left:-13px;top:0;
+    width:26px;height:26px;border-radius:50%;
+    background:var(--accent);color:#fff;
+    font-size:13px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  ol.steps h3{margin-bottom:6px}
+  ol.steps p{font-size:14.5px}
+
+  /* 代码块 */
+  pre{
+    background:#1c1e21;
+    color:#e8eaed;
+    font-family:var(--mono);
+    font-size:13px;
+    line-height:1.7;
+    border-radius:10px;
+    padding:14px 16px;
+    overflow-x:auto;
+    margin-top:12px;
+  }
+  pre .c{color:#8b929b}
+  code.inline{
+    font-family:var(--mono);
+    font-size:.88em;
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    border-radius:5px;
+    padding:1px 6px;
+    color:#b3305c;
+  }
+
+  /* 表格 */
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius)}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:480px}
+  th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line)}
+  th{background:var(--bg-soft);font-size:13px;font-weight:700;color:var(--text-2);letter-spacing:.02em}
+  tr:last-child td{border-bottom:0}
+  td:first-child{color:var(--text);font-weight:600;white-space:nowrap}
+
+  /* 提示条 */
+  .note{
+    display:flex;gap:12px;
+    background:var(--green-soft);
+    border:1px solid #c6e6d4;
+    border-radius:var(--radius);
+    padding:16px 18px;
+    margin-top:18px;
+    font-size:14.5px;
+    color:#14532d;
+  }
+  .note .n-ico{flex:0 0 auto;font-weight:700}
+
+  /* 页脚 */
+  footer{
+    padding:34px 0 56px;
+    font-size:13.5px;
+    color:var(--text-3);
+  }
+  footer a{color:var(--text-2);text-decoration:none;border-bottom:1px solid var(--line)}
+  footer a:hover{color:var(--accent);border-color:var(--accent)}
+  .fgrid{display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:space-between;align-items:center}
+
+  ul.plain{list-style:none;margin-top:12px}
+  ul.plain li{
+    position:relative;padding-left:20px;
+    font-size:14.5px;color:var(--text-2);margin-bottom:8px;
+  }
+  ul.plain li::before{
+    content:"";position:absolute;left:4px;top:.62em;
+    width:5px;height:5px;border-radius:50%;background:var(--accent);
+  }
+  ul.plain li b{color:var(--text)}
+
+  @media (max-width:600px){
+    header{padding:52px 0 42px}
+    section{padding:42px 0}
+    pre{font-size:12px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="kicker">GitHub Pages</span>
+    <h1>把你的网页<br><span class="hl">免费挂到互联网上</span></h1>
+    <p class="lede">
+      不用买服务器、不用配 Nginx、不用管运维。把 HTML 文件丢进 GitHub 仓库，
+      推一下代码，全世界就能打开你的网页了。
+    </p>
+    <div class="btn-row">
+      <a class="btn primary" href="https://pages.github.com/" target="_blank" rel="noopener">官方文档 ↗</a>
+      <a class="btn" href="https://github.com/aigamehtml/aigamehtml.github.io" target="_blank" rel="noopener">本页所在仓库 ↗</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section>
+    <div class="wrap">
+      <h2>一句话说清</h2>
+      <div class="define">
+        <b>GitHub Pages</b> 是 GitHub 提供的<b>静态网站托管服务</b>。
+        它直接读取你仓库里的文件，当成网站对外发布。
+        只要是「不需要后端程序」的东西 —— HTML、CSS、JavaScript、图片、博客 —— 它都能替你免费上线。
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>它能给你什么</h2>
+      <div class="grid">
+        <div class="card">
+          <div class="ico">¥</div>
+          <h3>完全免费</h3>
+          <p>公开仓库不限量，流量和存储都由 GitHub 承担。个人小站、作品集、文档站，一分钱不花。</p>
+        </div>
+        <div class="card">
+          <div class="ico">⚡</div>
+          <h3>推代码即上线</h3>
+          <p>绑定仓库分支后，每次 <code class="inline">git push</code> 自动重新构建发布，一分钟左右生效。</p>
+        </div>
+        <div class="card">
+          <div class="ico">🔒</div>
+          <h3>自带 HTTPS</h3>
+          <p>默认域名自动签发证书，不用自己申请、不用手动续期。<code class="inline">https</code> 直接可用。</p>
+        </div>
+        <div class="card c3">
+          <div class="ico">🌐</div>
+          <h3>可绑自有域名</h3>
+          <p>加一个 CNAME 文件，就能把 <code class="inline">xxx.github.io</code> 换成你自己的域名。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>三分钟上线</h2>
+      <ol class="steps">
+        <li>
+          <h3>建一个仓库</h3>
+          <p>名称用 <code class="inline">你的用户名.github.io</code>，这是站点主域名仓库。
+             想放子站也可以随便建一个普通仓库，比如 <code class="inline">my-site</code>。</p>
+        </li>
+        <li>
+          <h3>把网页文件放进去</h3>
+          <p>至少有一个 <code class="inline">index.html</code>，它是默认首页。子目录里的 html 也可以直接访问。</p>
+<pre><span class="c"># 目录结构示例</span>
+my-site/
+├── index.html        <span class="c"># 首页</span>
+├── about.html        <span class="c"># 子页面 → /about.html</span>
+├── workbuddy/
+│   └── index.html    <span class="c"># 子目录页 → /workbuddy/</span>
+└── style.css</pre>
+        </li>
+        <li>
+          <h3>开启 Pages</h3>
+          <p>仓库 <code class="inline">Settings → Pages</code>，Source 选分支（通常是 <code class="inline">main</code>）和目录
+             <code class="inline">/ (root)</code>，保存。</p>
+        </li>
+        <li>
+          <h3>等一分钟，打开链接</h3>
+          <p>形如 <code class="inline">https://用户名.github.io/仓库名/</code>；上一步的链接页面还会显示构建状态和实际地址。</p>
+        </li>
+      </ol>
+      <div class="note">
+        <span class="n-ico">提示</span>
+        <span>首次发布通常 1 分钟内完成。如果 404，先确认文件确实推送到了远端分支，再刷新 Pages 设置页看构建记录。</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>适合 / 不适合</h2>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>维度</th><th>说明</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>适合</td><td>个人主页、作品集、项目文档、博客、演示 Demo、小游戏、说明书类静态页</td></tr>
+            <tr><td>不适合</td><td>需要服务端逻辑的站点：登录注册、数据库读写、支付、文件上传、真实 API 后端</td></tr>
+            <tr><td>语言</td><td>只有浏览器能跑的东西：HTML / CSS / JS / WASM / 图片 / 字体</td></tr>
+            <tr><td>构建</td><td>可直接发布纯静态文件，也可接 Jekyll / Hugo / Hexo / Vite 等生成器的产物目录</td></tr>
+            <tr><td>使用限制</td><td>软性限额约 1GB 站点、每月 100GB 流量、每小时 10 次构建；禁止商用或做纯下载站</td></tr>
+            <tr><td>私有仓库</td><td>Free 账号需公开仓库才能用 Pages；Pro / 组织账号支持私有仓库发布</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="plain">
+        <li><b>想要后端？</b> 前端交给 Pages，接口另找 Serverless（如 Cloudflare Workers、云函数），两者拼起来就是一个完整产品。</li>
+        <li><b>想要动态能力？</b> 用第三方 BaaS 或浏览器端存储顶一顶，冷启动阶段完全够用。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>绑定自己的域名</h2>
+      <p>在仓库根目录新建一个名为 <code class="inline">CNAME</code> 的文件（没有扩展名），里面只写一行域名：</p>
+<pre><span class="c"># 文件名就叫 CNAME，内容只有一行</span>
+pages.example.com</pre>
+      <p>然后到域名服务商加解析：</p>
+<pre><span class="c"># 二级域名 → CNAME 记录</span>
+CNAME   pages   →   你的用户名.github.io
+
+<span class="c"># 裸域名（example.com）→ A 记录，指向 GitHub 的四个 IP</span>
+A       @       →   185.199.108.153
+A       @       →   185.199.109.153
+A       @       →   185.199.110.153
+A       @       →   185.199.111.153</pre>
+      <div class="note">
+        <span class="n-ico">提示</span>
+        <span>绑定域名后，Pages 设置里勾选 <code class="inline">Enforce HTTPS</code>，证书会自动签发。
+              根目录存在 CNAME 文件时，原 <code class="inline">github.io</code> 地址会自动跳转到你绑定的域名。</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>常见坑</h2>
+      <ul class="plain">
+        <li><b>路径写错</b> —— 仓库站点发布在 <code class="inline">/仓库名/</code> 下，用绝对路径 <code class="inline">/style.css</code> 会丢样式，推荐用相对路径 <code class="inline">./style.css</code> 或 <code class="inline">style.css</code>。</li>
+        <li><b>大小写敏感</b> —— 服务器区分大小写，<code class="inline">Logo.png</code> 写成了 <code class="inline">logo.png</code> 就是 404，本地 Windows 却看不见问题。</li>
+        <li><b>想用下划线开头的目录</b> —— 老式 Jekyll 构建会忽略下划线目录，可在仓库根加一个空的 <code class="inline">.nojekyll</code> 文件绕过。</li>
+        <li><b>改了不生效</b> —— 看 Actions / Pages 构建记录，别急着反复改代码；浏览器强刷或在链接后加参数排除缓存。</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap fgrid">
+    <span>本页是 GitHub Pages 的极简说明 · 单文件 HTML，无外部依赖</span>
+    <span><a href="https://pages.github.com/" target="_blank" rel="noopener">pages.github.com</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

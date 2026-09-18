@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#070913" />
+  <title>粒子宇宙</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #e8ecff;
+      --muted: rgba(218, 226, 255, .62);
+      --line: rgba(151, 172, 255, .16);
+      --glass: rgba(12, 16, 34, .56);
+      --accent: #8da2ff;
+      --accent-2: #52e0d4;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 20% 15%, rgba(93, 79, 255, .18), transparent 32rem),
+        radial-gradient(circle at 82% 78%, rgba(37, 213, 205, .13), transparent 30rem),
+        #070913;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+    }
+
+    .vignette {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse at center, transparent 45%, rgba(3, 5, 13, .48) 100%),
+        linear-gradient(180deg, rgba(4, 6, 15, .2), transparent 28%, rgba(4, 6, 15, .28));
+      mix-blend-mode: multiply;
+    }
+
+    .ui {
+      position: fixed;
+      top: max(24px, env(safe-area-inset-top));
+      left: max(24px, env(safe-area-inset-left));
+      z-index: 2;
+      max-width: min(420px, calc(100vw - 48px));
+      padding: 18px 20px 17px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(18, 23, 49, .72), rgba(8, 11, 26, .48));
+      box-shadow: 0 18px 60px rgba(0, 0, 0, .24), inset 0 1px 0 rgba(255,255,255,.06);
+      backdrop-filter: blur(14px) saturate(130%);
+      -webkit-backdrop-filter: blur(14px) saturate(130%);
+      user-select: none;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 9px;
+      color: var(--accent-2);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-2);
+      box-shadow: 0 0 14px var(--accent-2);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(25px, 4vw, 40px);
+      line-height: 1.02;
+      font-weight: 760;
+      letter-spacing: -.055em;
+    }
+
+    .subtitle {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .hint {
+      position: fixed;
+      right: max(24px, env(safe-area-inset-right));
+      bottom: max(24px, env(safe-area-inset-bottom));
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--glass);
+      color: rgba(226, 232, 255, .72);
+      font-size: 11px;
+      letter-spacing: .04em;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      pointer-events: none;
+    }
+
+    .hint svg {
+      width: 14px;
+      height: 14px;
+      flex: none;
+      stroke: var(--accent-2);
+    }
+
+    .credit {
+      position: fixed;
+      left: 50%;
+      bottom: max(24px, env(safe-area-inset-bottom));
+      z-index: 2;
+      transform: translateX(-50%);
+      color: rgba(203, 213, 255, .3);
+      font-size: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    @media (max-width: 640px) {
+      .ui {
+        top: max(16px, env(safe-area-inset-top));
+        left: max(16px, env(safe-area-inset-left));
+        max-width: calc(100vw - 32px);
+        padding: 15px 16px 14px;
+      }
+      .subtitle { font-size: 12px; }
+      .hint {
+        right: max(16px, env(safe-area-inset-right));
+        bottom: max(16px, env(safe-area-inset-bottom));
+      }
+      .credit { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ui, .hint { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="scene" aria-label="交互式粒子特效背景"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <section class="ui" aria-label="粒子特效说明">
+    <div class="eyebrow">Interactive field</div>
+    <h1>粒子宇宙</h1>
+    <p class="subtitle">移动指针，扰动星群；点击任意位置，释放一小片能量。</p>
+  </section>
+
+  <div class="hint" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 11.5V6.8a1.8 1.8 0 0 1 3.6 0v4.2" />
+      <path d="M12.6 11V5.8a1.8 1.8 0 0 1 3.6 0v6.1" />
+      <path d="M9 11.2 7.7 10a1.8 1.8 0 0 0-2.6 2.5l4.2 5.1A5.2 5.2 0 0 0 13.2 20h.2a5.2 5.2 0 0 0 4.2-2.1l2.5-3.4a1.8 1.8 0 0 0-2.8-2.2L15.7 14" />
+    </svg>
+    移动 · 点击
+  </div>
+  <div class="credit">Canvas / zero dependencies</div>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const canvas = document.getElementById('scene');
+      const ctx = canvas.getContext('2d', { alpha: true });
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+      let width = 0;
+      let height = 0;
+      let particles = [];
+      let rafId = 0;
+      let lastTime = performance.now();
+      let pointer = { x: -10000, y: -10000, active: false, pressure: 0 };
+      let pointerVelocity = { x: 0, y: 0 };
+      let previousPointer = { x: -10000, y: -10000 };
+      let resizeQueued = false;
+
+      const palette = [
+        { r: 141, g: 162, b: 255 },
+        { r: 82,  g: 224, b: 212 },
+        { r: 244, g: 151, b: 255 },
+        { r: 255, g: 190, b: 119 }
+      ];
+
+      const randomBetween = (min, max) => min + Math.random() * (max - min);
+      const pick = (items) => items[Math.floor(Math.random() * items.length)];
+      const distanceSquared = (a, b) => {
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        return dx * dx + dy * dy;
+      };
+
+      function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = Math.floor(width * DPR);
+        canvas.height = Math.floor(height * DPR);
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        buildParticles();
+        resizeQueued = false;
+      }
+
+      function buildParticles() {
+        const area = width * height;
+        const target = Math.max(42, Math.min(155, Math.round(area / 10500)));
+        particles = Array.from({ length: target }, () => {
+          const color = pick(palette);
+          return {
+            x: randomBetween(0, width),
+            y: randomBetween(0, height),
+            vx: randomBetween(-.18, .18),
+            vy: randomBetween(-.18, .18),
+            radius: randomBetween(.7, 2.45),
+            color,
+            phase: randomBetween(0, Math.PI * 2),
+            pulse: randomBetween(.55, 1.35),
+            drift: randomBetween(.12, .42)
+          };
+        });
+      }
+
+      function addBurst(x, y) {
+        const count = reduceMotion ? 18 : 34;
+        for (let i = 0; i < count; i += 1) {
+          const angle = randomBetween(0, Math.PI * 2);
+          const speed = randomBetween(1.1, 5.4);
+          const color = pick(palette);
+          particles.push({
+            x,
+            y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            radius: randomBetween(1.1, 2.8),
+            color,
+            phase: randomBetween(0, Math.PI * 2),
+            pulse: randomBetween(1.4, 2.8),
+            drift: randomBetween(.18, .55),
+            burst: 1
+          });
+        }
+        if (particles.length > 260) {
+          particles.splice(0, particles.length - 260);
+        }
+      }
+
+      function update(delta) {
+        const normalizedDelta = Math.min(delta / 16.67, 2.5);
+        const linkDistance = Math.min(145, Math.max(92, Math.sqrt(width * height) / 7.8));
+        const linkDistanceSquared = linkDistance * linkDistance;
+        const pointerRadius = 150;
+        const pointerRadiusSquared = pointerRadius * pointerRadius;
+
+        for (let i = 0; i < particles.length; i += 1) {
+          const p = particles[i];
+          p.phase += .012 * p.pulse * normalizedDelta;
+          p.x += p.vx * normalizedDelta;
+          p.y += p.vy * normalizedDelta;
+
+          if (pointer.active) {
+            const dx = p.x - pointer.x;
+            const dy = p.y - pointer.y;
+            const distSq = dx * dx + dy * dy;
+            if (distSq < pointerRadiusSquared && distSq > .01) {
+              const dist = Math.sqrt(distSq);
+              const force = (1 - dist / pointerRadius) * (pointer.pressure || .72) * .055 * normalizedDelta;
+              p.vx += (dx / dist) * force;
+              p.vy += (dy / dist) * force;
+            }
+          }
+
+          p.vx += Math.sin(p.y * .006 + p.phase) * .00012 * p.drift * normalizedDelta;
+          p.vy += Math.cos(p.x * .006 - p.phase) * .00012 * p.drift * normalizedDelta;
+          p.vx *= .986;
+          p.vy *= .986;
+
+          const maxSpeed = p.burst ? 6.5 : 1.15;
+          const speedSq = p.vx * p.vx + p.vy * p.vy;
+          if (speedSq > maxSpeed * maxSpeed) {
+            const scale = maxSpeed / Math.sqrt(speedSq);
+            p.vx *= scale;
+            p.vy *= scale;
+          }
+
+          if (p.x < -20) p.x = width + 20;
+          if (p.x > width + 20) p.x = -20;
+          if (p.y < -20) p.y = height + 20;
+          if (p.y > height + 20) p.y = -20;
+          if (p.burst) p.burst = Math.max(0, p.burst - .012 * normalizedDelta);
+
+          p.linkDistanceSquared = linkDistanceSquared;
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, width, height);
+        ctx.globalCompositeOperation = 'lighter';
+
+        const linkDistance = Math.sqrt(particles[0]?.linkDistanceSquared || 120 * 120);
+        const maxLinks = width < 640 ? 3 : 5;
+
+        for (let i = 0; i < particles.length; i += 1) {
+          const p = particles[i];
+          let links = 0;
+          for (let j = i + 1; j < particles.length && links < maxLinks; j += 1) {
+            const q = particles[j];
+            const dx = p.x - q.x;
+            const dy = p.y - q.y;
+            const distSq = dx * dx + dy * dy;
+            if (distSq > p.linkDistanceSquared) continue;
+            const dist = Math.sqrt(distSq);
+            const alpha = (1 - dist / linkDistance) * .34;
+            const gradient = ctx.createLinearGradient(p.x, p.y, q.x, q.y);
+            gradient.addColorStop(0, `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${alpha})`);
+            gradient.addColorStop(1, `rgba(${q.color.r}, ${q.color.g}, ${q.color.b}, ${alpha * .72})`);
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(q.x, q.y);
+            ctx.stroke();
+            links += 1;
+          }
+        }
+
+        for (const p of particles) {
+          const twinkle = .72 + Math.sin(p.phase) * .22 + p.burst * .8;
+          const radius = p.radius * (1 + p.burst * .35);
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${Math.min(1, twinkle)})`;
+          ctx.shadowColor = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, .72)`;
+          ctx.shadowBlur = p.burst ? 18 : 8;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+
+        if (pointer.active) {
+          const glow = ctx.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, 74);
+          glow.addColorStop(0, 'rgba(151, 174, 255, .16)');
+          glow.addColorStop(.42, 'rgba(82, 224, 212, .07)');
+          glow.addColorStop(1, 'rgba(82, 224, 212, 0)');
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(pointer.x, pointer.y, 74, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.strokeStyle = 'rgba(196, 210, 255, .34)';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.arc(pointer.x, pointer.y, 10 + Math.sin(performance.now() * .004) * 2, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        ctx.globalCompositeOperation = 'source-over';
+      }
+
+      function frame(now) {
+        const delta = Math.min(now - lastTime, 50);
+        lastTime = now;
+        update(delta);
+        draw();
+        rafId = requestAnimationFrame(frame);
+      }
+
+      function onPointerMove(event) {
+        const x = event.clientX;
+        const y = event.clientY;
+        pointerVelocity.x = x - previousPointer.x;
+        pointerVelocity.y = y - previousPointer.y;
+        pointer.x = x;
+        pointer.y = y;
+        pointer.active = true;
+        pointer.pressure = event.pointerType === 'touch' ? .95 : .72;
+        previousPointer.x = x;
+        previousPointer.y = y;
+      }
+
+      function onPointerLeave() {
+        pointer.active = false;
+        pointer.x = -10000;
+        pointer.y = -10000;
+        previousPointer.x = -10000;
+        previousPointer.y = -10000;
+      }
+
+      window.addEventListener('pointermove', onPointerMove, { passive: true });
+      window.addEventListener('pointerdown', (event) => {
+        onPointerMove(event);
+        addBurst(event.clientX, event.clientY);
+      }, { passive: true });
+      window.addEventListener('pointerleave', onPointerLeave, { passive: true });
+      window.addEventListener('blur', onPointerLeave);
+      window.addEventListener('resize', () => {
+        resizeQueued = true;
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame((now) => {
+          resize();
+          lastTime = now;
+          rafId = requestAnimationFrame(frame);
+        });
+      }, { passive: true });
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          cancelAnimationFrame(rafId);
+          rafId = 0;
+        } else if (!rafId) {
+          lastTime = performance.now();
+          rafId = requestAnimationFrame(frame);
+        }
+      });
+
+      resize();
+      lastTime = performance.now();
+      rafId = requestAnimationFrame(frame);
+    })();
+  </script>
+</body>
+</html>

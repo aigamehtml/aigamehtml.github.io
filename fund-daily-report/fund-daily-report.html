@@ -3,212 +3,173 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>基金日报 · 测试页</title>
+<title>基金日报 · 证券ETF易方达(512570)/联接C(012700) - 2026-10-09</title>
 <style>
-  :root {
-    --bg: #f5f7fb;
-    --card: #ffffff;
-    --text: #1f2937;
-    --muted: #6b7280;
-    --up: #e0503c;
-    --down: #1a9e6b;
-    --primary: #2563eb;
-    --border: #e5e7eb;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-    padding: 24px 16px;
-  }
-  .container { max-width: 960px; margin: 0 auto; }
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 20px;
-  }
-  .header h1 { font-size: 24px; }
-  .header .date { color: var(--muted); font-size: 14px; }
-  .badge {
-    display: inline-block;
-    background: #fef3c7;
-    color: #92400e;
-    font-size: 12px;
-    padding: 2px 10px;
-    border-radius: 999px;
-    border: 1px solid #fcd34d;
-  }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 16px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-  }
-  .card h2 { font-size: 16px; margin-bottom: 12px; }
-  .index-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-  }
-  .index-item {
-    background: #f9fafb;
-    border-radius: 8px;
-    padding: 12px;
-  }
-  .index-item .name { font-size: 13px; color: var(--muted); }
-  .index-item .value { font-size: 20px; font-weight: 600; margin: 4px 0; }
-  .up { color: var(--up); }
-  .down { color: var(--down); }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-  }
-  th, td {
-    text-align: left;
-    padding: 10px 8px;
-    border-bottom: 1px solid var(--border);
-    white-space: nowrap;
-  }
-  th {
-    background: #f9fafb;
-    color: var(--muted);
-    font-weight: 500;
-    font-size: 13px;
-  }
-  td.code { font-family: "SF Mono", Consolas, monospace; color: var(--muted); }
-  .tag {
-    font-size: 12px;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-weight: 500;
-  }
-  .tag.buy { background: #fee2e2; color: #b91c1c; }
-  .tag.hold { background: #e0e7ff; color: #3730a3; }
-  .tag.reduce { background: #d1fae5; color: #065f46; }
-  .footer {
-    color: var(--muted);
-    font-size: 12px;
-    text-align: center;
-    margin-top: 24px;
-  }
+:root{--bg:#0f172a;--card:#1e293b;--card2:#273449;--line:#334155;--txt:#e2e8f0;--sub:#94a3b8;--up:#f43f5e;--down:#22c55e;--accent:#38bdf8;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--txt);line-height:1.6;padding:24px;}
+.wrap{max-width:1080px;margin:0 auto;}
+.header{text-align:center;padding:28px 20px;background:linear-gradient(135deg,#1e3a8a,#0ea5e9);border-radius:16px;margin-bottom:20px;}
+.header h1{font-size:26px;letter-spacing:1px;}
+.header .sub{margin-top:8px;color:#dbeafe;font-size:14px;}
+.header .badges{margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+.badge{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:2px 12px;font-size:12px;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px;}
+.card h2{font-size:16px;color:var(--accent);margin-bottom:12px;border-left:4px solid var(--accent);padding-left:10px;}
+.grid{display:grid;gap:12px;}
+.g4{grid-template-columns:repeat(4,1fr);}
+.g3{grid-template-columns:repeat(3,1fr);}
+.g2{grid-template-columns:repeat(2,1fr);}
+@media(max-width:720px){.g4,.g3{grid-template-columns:repeat(2,1fr);}.g2{grid-template-columns:1fr;}}
+.metric{background:var(--card2);border-radius:10px;padding:12px 14px;}
+.metric .label{font-size:12px;color:var(--sub);}
+.metric .value{font-size:20px;font-weight:700;margin-top:2px;}
+.metric .extra{font-size:12px;color:var(--sub);margin-top:2px;}
+.up{color:var(--up);} .down{color:var(--down);} .flat{color:var(--sub);}
+table{width:100%;border-collapse:collapse;font-size:14px;}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);}
+th{color:var(--sub);font-weight:500;background:#1a2536;}
+.note{font-size:12px;color:var(--sub);margin-top:8px;}
+.analysis p{margin-bottom:10px;font-size:14px;}
+.analysis ul{margin:6px 0 10px 20px;}
+.analysis li{margin-bottom:6px;font-size:14px;}
+.tag{display:inline-block;font-size:11px;padding:1px 8px;border-radius:10px;margin-right:6px;}
+.tag.red{background:rgba(244,63,94,.15);color:#fb7185;border:1px solid rgba(244,63,94,.4);}
+.tag.green{background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.4);}
+.tag.blue{background:rgba(56,189,248,.15);color:#38bdf8;border:1px solid rgba(56,189,248,.4);}
+.tag.yellow{background:rgba(250,204,21,.15);color:#facc15;border:1px solid rgba(250,204,21,.4);}
+.footer{text-align:center;color:var(--sub);font-size:12px;margin-top:20px;padding:16px;border-top:1px solid var(--line);}
+a{color:var(--accent);text-decoration:none;}
 </style>
 </head>
 <body>
-<div class="container">
+
+<div class="wrap">
   <div class="header">
-    <h1>📊 基金日报 <span class="badge">测试页</span></h1>
-    <span class="date">2026年10月9日 · 星期五</span>
-  </div>
-
-  <div class="card">
-    <h2>市场概览</h2>
-    <div class="index-grid">
-      <div class="index-item">
-        <div class="name">上证指数</div>
-        <div class="value up">3,284.16 <span class="up">+0.72%</span></div>
-      </div>
-      <div class="index-item">
-        <div class="name">深证成指</div>
-        <div class="value up">10,582.39 <span class="up">+1.04%</span></div>
-      </div>
-      <div class="index-item">
-        <div class="name">创业板指</div>
-        <div class="value up">2,216.88 <span class="up">+1.31%</span></div>
-      </div>
-      <div class="index-item">
-        <div class="name">沪深300</div>
-        <div class="value up">3,912.55 <span class="up">+0.83%</span></div>
-      </div>
+    <h1>📊 基金日报 · 证券ETF易方达（512570）</h1>
+    <div class="sub">易方达中证全指证券公司ETF联接C（012700） · 跟踪指数：中证全指证券公司（399975）</div>
+    <div class="badges">
+      <span class="badge">报告日期：2026-10-09（盘中）</span>
+      <span class="badge">ETF行情时间：2026-10-09 12:05:57</span>
+      <span class="badge">场外净值截至：2026-10-08</span>
+      <span class="badge">数据源：天天基金 / 腾讯财经</span>
     </div>
   </div>
 
   <div class="card">
-    <h2>基金净值排行（示例数据）</h2>
-    <div style="overflow-x: auto;">
-      <table>
-        <thead>
-          <tr>
-            <th>基金代码</th>
-            <th>基金名称</th>
-            <th>单位净值</th>
-            <th>日涨跌幅</th>
-            <th>近1月</th>
-            <th>近1年</th>
-            <th>建议</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="code">110022</td>
-            <td>易方达消费行业股票</td>
-            <td>3.8120</td>
-            <td class="up">+1.85%</td>
-            <td class="up">+4.2%</td>
-            <td class="down">-6.8%</td>
-            <td><span class="tag buy">定投</span></td>
-          </tr>
-          <tr>
-            <td class="code">161725</td>
-            <td>招商中证白酒指数A</td>
-            <td>0.9346</td>
-            <td class="up">+2.31%</td>
-            <td class="up">+7.5%</td>
-            <td class="down">-12.3%</td>
-            <td><span class="tag hold">持有</span></td>
-          </tr>
-          <tr>
-            <td class="code">003096</td>
-            <td>中欧医疗健康混合A</td>
-            <td>1.6980</td>
-            <td class="down">-0.46%</td>
-            <td class="up">+1.1%</td>
-            <td class="down">-15.2%</td>
-            <td><span class="tag hold">观望</span></td>
-          </tr>
-          <tr>
-            <td class="code">000961</td>
-            <td>天弘沪深300指数A</td>
-            <td>2.0351</td>
-            <td class="up">+0.83%</td>
-            <td class="up">+3.4%</td>
-            <td class="up">+8.9%</td>
-            <td><span class="tag buy">定投</span></td>
-          </tr>
-          <tr>
-            <td class="code">001594</td>
-            <td>天弘中证银行指数A</td>
-            <td>1.4022</td>
-            <td class="up">+0.55%</td>
-            <td class="up">+2.0%</td>
-            <td class="up">+16.4%</td>
-            <td><span class="tag reduce">分批止盈</span></td>
-          </tr>
-        </tbody>
-      </table>
+    <h2>一、今日行情</h2>
+    <div class="grid g4">
+      <div class="metric">
+        <div class="label">ETF 现价（512570）</div>
+        <div class="value">1.021 <span class="extra up">+0.29%</span></div>
+        <div class="extra">涨跌 +0.003</div>
+      </div>
+      <div class="metric">
+        <div class="label">今开 / 昨收</div>
+        <div class="value" style="font-size:16px;">1.013 / 1.018</div>
+        <div class="extra">最高 1.025 · 最低 1.013</div>
+      </div>
+      <div class="metric">
+        <div class="label">成交量 / 成交额</div>
+        <div class="value" style="font-size:16px;">798,477 手</div>
+        <div class="extra">成交额 8,150 万元</div>
+      </div>
+      <div class="metric">
+        <div class="label">换手率 / 量比 / 振幅</div>
+        <div class="value" style="font-size:16px;">1.99% / 1.54</div>
+        <div class="extra">振幅 1.18%</div>
+      </div>
     </div>
+    <div class="grid g2" style="margin-top:12px;">
+      <div class="metric">
+        <div class="label">场外联接C（012700）最新净值</div>
+        <div class="value">1.0527 <span class="extra down">-1.61%</span></div>
+        <div class="extra">净值日期：2026-10-08（基金经理：张湛）</div>
+      </div>
+      <div class="metric">
+        <div class="label">指数参考：中证全指证券公司（399975）</div>
+        <div class="value" style="font-size:16px;">703.28 <span class="down">-1.69%</span></div>
+        <div class="extra">2026-10-08 收盘 · 52周区间 697.85 ~ 912.42</div>
+      </div>
+    </div>
+    <div class="note">⚠️ ETF 为盘中数据（12:05 午间休市快照），场外基金净值以当日收盘后公布的官方值为准。</div>
   </div>
 
   <div class="card">
-    <h2>今日要闻（示例）</h2>
-    <ul style="font-size: 14px; padding-left: 20px;">
-      <li>权益市场整体回暖，消费、科技板块领涨。</li>
-      <li>北向资金今日净流入约 45 亿元。</li>
-      <li>多家公募基金公告四季度投资策略，关注盈利修复主线。</li>
+    <h2>二、技术指标（基于日线，截至 2026-10-09）</h2>
+    <div class="grid g4">
+      <div class="metric"><div class="label">MA5</div><div class="value">1.028</div><div class="extra">现价低于</div></div>
+      <div class="metric"><div class="label">MA10</div><div class="value">1.048</div><div class="extra">现价低于</div></div>
+      <div class="metric"><div class="label">MA20</div><div class="value">1.063</div><div class="extra">现价低于</div></div>
+      <div class="metric"><div class="label">MA60</div><div class="value">1.091</div><div class="extra">现价低于</div></div>
+      <div class="metric"><div class="label">RSI(14)</div><div class="value">33.1</div><div class="extra">偏弱（接近超卖）</div></div>
+      <div class="metric"><div class="label">MACD</div><div class="value" style="font-size:15px;">-0.0177</div><div class="extra">DIF -0.0177 · DEA -0.0133 · 柱 -0.0088</div></div>
+      <div class="metric"><div class="label">52周最高</div><div class="value">1.293</div><div class="extra">距高点 -21.0%</div></div>
+      <div class="metric"><div class="label">52周最低</div><div class="value">1.007</div><div class="extra">距低点 1.4%</div></div>
+    </div>
+    <table style="margin-top:14px;">
+      <tr><th>区间涨跌幅</th><th>1日</th><th>5日</th><th>20日</th><th>60日</th><th>近1年(250日)</th></tr>
+      <tr>
+        <td>512570</td>
+        <td class="up">+0.29%</td>
+        <td class="down">-2.95%</td>
+        <td class="down">-7.60%</td>
+        <td class="down">-10.36%</td>
+        <td class="down">-16.38%</td>
+      </tr>
+      <tr>
+        <td>012700（官网区间）</td>
+        <td colspan="2" class="down">-1.61%（2026-10-08）</td>
+        <td class="down">-6.36%</td>
+        <td class="down">-8.32%</td>
+        <td class="down">-18.67%</td>
+      </tr>
+    </table>
+    <div class="note">注：012700 的「近1月/近3月/近1年」取自天天基金官方区间涨幅；ETF 区间为复权价计算。</div>
+  </div>
+
+  <div class="card">
+    <h2>三、基金概况</h2>
+    <div class="grid g3">
+      <div class="metric"><div class="label">场内 ETF（512570）</div><div class="value" style="font-size:16px;">证券ETF易方达</div><div class="extra">交易型开放式指数基金 · 上交所</div></div>
+      <div class="metric"><div class="label">场外联接 C（012700）</div><div class="value" style="font-size:16px;">易方达中证全指证券公司ETF联接C</div><div class="extra">C类：申购费 0.00，适合短线/定投</div></div>
+      <div class="metric"><div class="label">跟踪指数</div><div class="value" style="font-size:16px;">中证全指证券公司</div><div class="extra">399975 · 50只证券行业股票</div></div>
+      <div class="metric"><div class="label">基金经理</div><div class="value" style="font-size:16px;">张湛</div><div class="extra">从业 6年又208天 · 管理规模约1413.72亿（26只）</div></div>
+      <div class="metric"><div class="label">基金公司</div><div class="value" style="font-size:16px;">易方达基金</div><div class="extra">头部公募基金公司</div></div>
+      <div class="metric"><div class="label">C类费用特点</div><div class="value" style="font-size:16px;">0 申购费</div><div class="extra">按日计提销售服务费；适合持有期较短的波段操作</div></div>
+    </div>
+  </div>
+
+  <div class="card analysis">
+    <h2>四、综合分析与操作参考</h2>
+    <p><span class="tag red">短线偏弱</span><span class="tag yellow">估值低位</span><span class="tag blue">政策/并购催化</span><span class="tag green">三季报预期</span></p>
+    <p><b>1. 技术面：空头排列，但已接近超卖区</b><br>
+    512570 现价 1.021 仍低于 MA5/MA10/MA20/MA60，均线呈空头排列；RSI(14)≈33，逼近超卖区域，短线存在技术性反抽需求。MACD 位于零轴下方（DIF -0.0177 / DEA -0.0133 / 柱 -0.0088），绿柱表明空头动能尚未完全衰竭，需观察后续能否收窄。下方近期支撑关注 1.013（今日低点）与 1.007（52周低点附近），上方第一压力位看 MA5（1.028）与整数关口 1.05。</p>
+    <p><b>2. 基本面与消息面：低位 + 政策催化 + 业绩预期</b><br>
+    中证全指证券公司指数（399975）10月8日收于 703.28 点（-1.69%），距 52 周低点 697.85 仅一步之遥，板块估值已回落至历史偏低水平，配置性价比提升。机构观点普遍认为：① 行业并购整合持续推进（东方证券等案例落地），资源向头部集中；② 券商 AI 数字化转型提速，头部券商三季度盈利有望超预期；③ 招商证券对 10 月 A 股持谨慎乐观，认为是结构性修复窗口；中泰证券认为市场反弹条件已较坚实（筹码出清、估值收缩、政策底明确、波动率回落）。</p>
+    <p><b>3. 风险点</b><br>
+    ① 国庆假期港股券商股一度回调，外围情绪扰动；② 市场成交活跃度若不能持续放大，券商业绩弹性受限；③ 板块轮动较快，缺乏持续主线时容易反复震荡；④ 节后首日指数下跌，短期趋势仍偏弱。</p>
+    <p><b>4. 操作参考（非投资建议）</b><br>
+    短线：等待企稳信号，关注能否放量收复 MA5（1.028），未收复前以观望为主，支撑位看 1.013 / 1.007；<br>
+    中线：在低估值 + 政策催化 + 三季报预期下，可考虑分批定投或网格布局；场外选 C 类（012700）无申购费，适合波段；A类（012590）适合长期持有。<br>
+    ⚠️ 券商是典型高 Beta 板块，波动大，务必控制仓位、设置好止损纪律。</p>
+  </div>
+
+  <div class="card">
+    <h2>五、数据来源与免责声明</h2>
+    <ul style="font-size:13px;color:var(--sub);margin-left:18px;">
+      <li>场外基金净值/区间涨幅：天天基金公开接口（fund.eastmoney.com/pingzhongdata/012700.js）</li>
+      <li>场内 ETF 行情与技术指标：腾讯财经公开行情接口（web.ifzq.gtimg.cn），日线复权数据</li>
+      <li>指数与新闻：新浪财经、东方财富、证券时报、凤凰网等公开报道（2026-06 ~ 2026-10）</li>
+      <li>本页面为自动生成的基金日报测试页，所有数据仅供参考，不构成任何投资建议。</li>
     </ul>
   </div>
 
   <div class="footer">
-    本页面为基金日报测试页，所有数据均为演示占位数据，不构成任何投资建议。<br>
-    Fund Daily Report · Test Page
+    基金有风险，投资须谨慎 · 数据仅供参考 · Generated by 小O @ 2026-10-09<br>
+    访问链接：<a href="https://pages.wangyi.dpdns.org/fund-daily-report/fund-daily-report.html">https://pages.wangyi.dpdns.org/fund-daily-report/fund-daily-report.html</a>
   </div>
 </div>
+
 </body>
 </html>

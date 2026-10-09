@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>基金日报 · 测试页</title>
+<style>
+  :root {
+    --bg: #f5f7fb;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --up: #e0503c;
+    --down: #1a9e6b;
+    --primary: #2563eb;
+    --border: #e5e7eb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 24px 16px;
+  }
+  .container { max-width: 960px; margin: 0 auto; }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .header h1 { font-size: 24px; }
+  .header .date { color: var(--muted); font-size: 14px; }
+  .badge {
+    display: inline-block;
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 12px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    border: 1px solid #fcd34d;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .card h2 { font-size: 16px; margin-bottom: 12px; }
+  .index-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+  }
+  .index-item {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 12px;
+  }
+  .index-item .name { font-size: 13px; color: var(--muted); }
+  .index-item .value { font-size: 20px; font-weight: 600; margin: 4px 0; }
+  .up { color: var(--up); }
+  .down { color: var(--down); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  th {
+    background: #f9fafb;
+    color: var(--muted);
+    font-weight: 500;
+    font-size: 13px;
+  }
+  td.code { font-family: "SF Mono", Consolas, monospace; color: var(--muted); }
+  .tag {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-weight: 500;
+  }
+  .tag.buy { background: #fee2e2; color: #b91c1c; }
+  .tag.hold { background: #e0e7ff; color: #3730a3; }
+  .tag.reduce { background: #d1fae5; color: #065f46; }
+  .footer {
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+    margin-top: 24px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>📊 基金日报 <span class="badge">测试页</span></h1>
+    <span class="date">2026年10月9日 · 星期五</span>
+  </div>
+
+  <div class="card">
+    <h2>市场概览</h2>
+    <div class="index-grid">
+      <div class="index-item">
+        <div class="name">上证指数</div>
+        <div class="value up">3,284.16 <span class="up">+0.72%</span></div>
+      </div>
+      <div class="index-item">
+        <div class="name">深证成指</div>
+        <div class="value up">10,582.39 <span class="up">+1.04%</span></div>
+      </div>
+      <div class="index-item">
+        <div class="name">创业板指</div>
+        <div class="value up">2,216.88 <span class="up">+1.31%</span></div>
+      </div>
+      <div class="index-item">
+        <div class="name">沪深300</div>
+        <div class="value up">3,912.55 <span class="up">+0.83%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>基金净值排行（示例数据）</h2>
+    <div style="overflow-x: auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>基金代码</th>
+            <th>基金名称</th>
+            <th>单位净值</th>
+            <th>日涨跌幅</th>
+            <th>近1月</th>
+            <th>近1年</th>
+            <th>建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="code">110022</td>
+            <td>易方达消费行业股票</td>
+            <td>3.8120</td>
+            <td class="up">+1.85%</td>
+            <td class="up">+4.2%</td>
+            <td class="down">-6.8%</td>
+            <td><span class="tag buy">定投</span></td>
+          </tr>
+          <tr>
+            <td class="code">161725</td>
+            <td>招商中证白酒指数A</td>
+            <td>0.9346</td>
+            <td class="up">+2.31%</td>
+            <td class="up">+7.5%</td>
+            <td class="down">-12.3%</td>
+            <td><span class="tag hold">持有</span></td>
+          </tr>
+          <tr>
+            <td class="code">003096</td>
+            <td>中欧医疗健康混合A</td>
+            <td>1.6980</td>
+            <td class="down">-0.46%</td>
+            <td class="up">+1.1%</td>
+            <td class="down">-15.2%</td>
+            <td><span class="tag hold">观望</span></td>
+          </tr>
+          <tr>
+            <td class="code">000961</td>
+            <td>天弘沪深300指数A</td>
+            <td>2.0351</td>
+            <td class="up">+0.83%</td>
+            <td class="up">+3.4%</td>
+            <td class="up">+8.9%</td>
+            <td><span class="tag buy">定投</span></td>
+          </tr>
+          <tr>
+            <td class="code">001594</td>
+            <td>天弘中证银行指数A</td>
+            <td>1.4022</td>
+            <td class="up">+0.55%</td>
+            <td class="up">+2.0%</td>
+            <td class="up">+16.4%</td>
+            <td><span class="tag reduce">分批止盈</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>今日要闻（示例）</h2>
+    <ul style="font-size: 14px; padding-left: 20px;">
+      <li>权益市场整体回暖，消费、科技板块领涨。</li>
+      <li>北向资金今日净流入约 45 亿元。</li>
+      <li>多家公募基金公告四季度投资策略，关注盈利修复主线。</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    本页面为基金日报测试页，所有数据均为演示占位数据，不构成任何投资建议。<br>
+    Fund Daily Report · Test Page
+  </div>
+</div>
+</body>
+</html>

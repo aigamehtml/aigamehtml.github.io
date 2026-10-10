@@ -126,6 +126,31 @@
       return { type: 'bfi', factorScores: bfiScores };
     }
 
+    if (scale.type === 'fun-cat') {
+      var counts = {};
+      scale.categories.forEach(function (c) { counts[c.key] = 0; });
+      answers.forEach(function (v, i) {
+        var opt = scale.items[i].options[v];
+        if (opt && opt.key) counts[opt.key]++;
+      });
+      var top = scale.categories[0];
+      scale.categories.forEach(function (c) { if (counts[c.key] > counts[top.key]) top = c; });
+      return { type: 'fun-cat', top: top, counts: counts, categories: scale.categories };
+    }
+
+    if (scale.type === 'fun-score') {
+      var totalF = 0;
+      answers.forEach(function (v, i) {
+        var opt = scale.items[i].options[v];
+        if (opt && typeof opt.score === 'number') totalF += opt.score;
+      });
+      var levelF = scale.levels[scale.levels.length - 1];
+      for (var m = 0; m < scale.levels.length; m++) {
+        if (totalF <= scale.levels[m].max) { levelF = scale.levels[m]; break; }
+      }
+      return { type: 'fun-score', total: totalF, level: levelF };
+    }
+
     return { type: 'unknown' };
   }
 
@@ -151,7 +176,21 @@
     );
   }
 
-  function ResultView(props) {
+  /* 趣味测评：分类计数条 */
+    function CountBar(props) {
+      var pct = (props.count / props.max) * 100;
+      return h('div', { className: 'factor-row' },
+        h('div', { className: 'factor-head' },
+          h('span', { className: 'factor-name' }, props.name),
+          h('span', { className: 'factor-val' }, props.count + ' / ' + props.max)
+        ),
+        h('div', { className: 'factor-track' },
+          h('div', { className: 'factor-fill', style: { width: pct + '%' } })
+        )
+      );
+    }
+
+    function ResultView(props) {
     var r = props.r;
     var actions = h('div', { className: 'result-actions' },
       h(Button, { type: 'primary', block: true, onClick: props.onRestart }, '再测一次'),
@@ -242,7 +281,51 @@
       );
     }
 
-    return actions;
+    if (r.type === 'fun-cat') {
+        return h('div', { className: 'result-wrap' },
+          h('div', { className: 'ai-card result-hero' },
+            h('div', { className: 'score-label' }, '你的结果是'),
+            h('div', { className: 'fun-type-title' }, r.top.title),
+            h('div', { className: 'level-desc' }, r.top.desc),
+            h('div', { className: 'fun-advice' }, '小建议：' + r.top.advice)
+          ),
+          h('div', { className: 'ai-card ai-card-dashed result-section' },
+            h('div', { className: 'section-title' }, '各类型分布'),
+            r.categories.map(function (c) {
+              return h(CountBar, { key: c.key, name: c.title, count: r.counts[c.key], max: scale.items.length });
+            })
+          ),
+          h('div', { className: 'ai-card ai-card-dashed result-section' },
+            h('div', { className: 'section-title' }, '其他类型速览'),
+            r.categories.filter(function (c) { return c.key !== r.top.key; }).map(function (c) {
+              return h('div', { key: c.key, className: 'mini-type' },
+                h('span', { className: 'mini-type-name' }, c.title),
+                h('span', { className: 'mini-type-desc' }, c.desc)
+              );
+            })
+          ),
+          actions
+        );
+      }
+
+      if (r.type === 'fun-score') {
+        return h('div', { className: 'result-wrap' },
+          h('div', { className: 'ai-card result-hero' },
+            h('div', { className: 'score-label' }, '孤独等级 · 满分 ' + scale.levels[scale.levels.length - 1].max + ' 分'),
+            h('div', { className: 'score-big' }, String(r.total)),
+            h('div', {}, levelTag(r.level)),
+            h('div', { className: 'level-desc' }, r.level.desc),
+            h('div', { className: 'fun-advice' }, '小建议：' + r.level.advice)
+          ),
+          h('div', { className: 'ai-card ai-card-dashed result-section' },
+            h('div', { className: 'section-title' }, '分数说明'),
+            h('div', { className: 'factor-desc' }, '每题按「几乎不会 0 分 / 偶尔会 1 分 / 经常这样 2 分」计分，总分越高代表孤独感受越强。本测评仅供娱乐，不构成心理评估。')
+          ),
+          actions
+        );
+      }
+
+      return actions;
   }
 
   /* ---------- 答题页 ---------- */
@@ -312,7 +395,7 @@
       );
     }
 
-    var opts = isAis ? qs[current].options : scale.options;
+    var opts = qs[current].options || scale.options;
     var answeredCount = answers.filter(function (a) { return a !== null; }).length;
     var percent = (answeredCount / qs.length) * 100;
 
@@ -335,10 +418,10 @@
       h(Progress, { percent: percent }),
       h('div', { className: 'ai-card ai-card-dashed question-card' },
         h('div', { className: 'question-num' }, '第 ' + (current + 1) + ' / ' + qs.length + ' 题'),
-        h('div', { className: 'question-text' }, (isAis ? qs[current].text : qs[current])),
+        h('div', { className: 'question-text' }, (typeof qs[current] === 'string' ? qs[current] : qs[current].text)),
         h('div', { className: 'option-list' },
           opts.map(function (o, i) {
-            return h(RadioOption, { key: i, label: o, checked: answer === i, onSelect: function () { select(i); } });
+            return h(RadioOption, { key: i, label: (typeof o === 'string' ? o : o.text), checked: answer === i, onSelect: function () { select(i); } });
           })
         )
       ),

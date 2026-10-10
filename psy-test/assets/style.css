@@ -129,6 +129,7 @@ button { font-family: var(--animal-font); }
 .ai-card-app-green { background: #8ac68a; color: #fff; }
 .ai-card-app-purple { background: #b77dee; color: #fff; }
 .ai-card-app-orange { background: #e59266; color: #fff; }
+.ai-card-app-red { background: #fc736d; color: #fff; }
 
 /* ===== 答题页 ===== */
 .question-card { margin-top: 8px; padding: 20px; }
@@ -281,3 +282,17 @@ button { font-family: var(--animal-font); }
   .score-big { font-size: 56px; }
   .ai-modal { padding: 40px 28px 28px; }
 }
+
+/* ===== 趣味测评结果页 ===== */
+.fun-type-title { font-size: 32px; font-weight: 900; color: #794f27; line-height: 1.3; margin: 8px 0 6px; letter-spacing: .01em; }
+.fun-advice { margin-top: 12px; padding: 12px 14px; border-radius: 14px; background: rgba(255,255,255,.6); border: 1.5px dashed #c4b89e; font-size: 14px; line-height: 1.7; color: #725d42; font-weight: 500; }
+.mini-type { padding: 10px 0; border-bottom: 1px dashed #e8dcc8; }
+.mini-type:last-child { border-bottom: none; }
+.mini-type-name { display: inline-block; font-weight: 700; color: #794f27; margin-bottom: 2px; }
+.mini-type-desc { font-size: 14px; color: #8a7b66; line-height: 1.6; margin-top: 2px; }
+
+/* ===== 主页分区标题 ===== */
+.home-section-title { margin: 30px 0 14px; text-align: center; font-size: 14px; font-weight: 800; color: #9f927d; letter-spacing: .14em; display: flex; align-items: center; gap: 12px; }
+.home-section-title::before, .home-section-title::after { content: ''; flex: 1; height: 2px; border-radius: 2px; background: linear-gradient(90deg, transparent, rgba(196,184,158,.5)); }
+.home-section-title::after { background: linear-gradient(90deg, rgba(196,184,158,.5), transparent); }
+.home-fun-tip { text-align: center; font-size: 13px; color: #a89878; margin: -6px 0 14px; }
